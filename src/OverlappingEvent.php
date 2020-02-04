@@ -7,8 +7,8 @@ namespace tsc\doubleBooked;
 class OverlappingEvent
 {
 
-    private $mainEvent;
-    private $overlappingEvents;
+    private Event $mainEvent;
+    private array $overlappingEvents;
 
     public function __construct(Event $mainEvent, $overlappingEvents = [])
     {
@@ -16,15 +16,21 @@ class OverlappingEvent
         $this->overlappingEvents = $overlappingEvents;
     }
 
+    /**
+     * event which is overlap
+     * @return Event
+     */
     public function getEvent(): Event
     {
         return $this->mainEvent;
     }
 
     /**
+     * get events which overlapping "main" event
+     *
      * @return Event[]
      */
-    public function getOverlappingEvents(): ?array
+    public function getOverlappingEvents(): array
     {
         return $this->overlappingEvents;
     }

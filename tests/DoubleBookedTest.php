@@ -15,19 +15,24 @@ final class DoubleBookedTest extends TestCase
     {
         $db = new DoubleBooked();
 
-        $event1 = new Event(
-            DateTime::createFromFormat('Y-m-d G:i', '2007-01-01 00:00'),
-            DateTime::createFromFormat('Y-m-d G:i', '2008-01-01 00:00')
-        );
-        $event2 = new Event(
-            DateTime::createFromFormat('Y-m-d G:i', '2008-01-01 00:00'),
+        $event1 = new Event( //2000 - 2010
+            DateTime::createFromFormat('Y-m-d G:i', '2000-01-01 00:00'),
             DateTime::createFromFormat('Y-m-d G:i', '2010-01-01 00:00')
+        );
+        $event2 = new Event( //2020 - 2030
+            DateTime::createFromFormat('Y-m-d G:i', '2020-01-01 00:00'),
+            DateTime::createFromFormat('Y-m-d G:i', '2030-01-01 00:00')
+        );
+        $event3 = new Event( //2030 - 2040
+            DateTime::createFromFormat('Y-m-d G:i', '2030-01-01 00:00'),
+            DateTime::createFromFormat('Y-m-d G:i', '2040-01-01 00:00')
         );
 
         $db->add(
             $event1,
             $event2,
-            );
+            $event3
+        );
 
         $oe = $db->getOverlappingEvents();
 
@@ -68,18 +73,38 @@ final class DoubleBookedTest extends TestCase
         $this->assertEquals(1, count($oe[0]->getOverlappingEvents()));
         $this->assertEquals(2, count($oe[1]->getOverlappingEvents()));
         $this->assertEquals(1, count($oe[2]->getOverlappingEvents()));
+    }
 
-        echo "\nevents:\n";
-        echo $event1 . "\n";
-        echo $event2 . "\n";
-        echo $event3 . "\n";
+    public function testCase3(): void
+    {
+        $db = new DoubleBooked();
+        $event1 = new Event( // 2000 - 2020, overlapping by event 2
+            DateTime::createFromFormat('Y-m-d G:i', '2000-01-01 00:00'),
+            DateTime::createFromFormat('Y-m-d G:i', '2020-01-01 00:00')
+        );
+        $event2 = new Event( // 2010 - 2011, overlapping by event 1
+            DateTime::createFromFormat('Y-m-d G:i', '2010-01-01 00:00'),
+            DateTime::createFromFormat('Y-m-d G:i', '2011-01-01 00:00')
+        );
+        $event3 = new Event( // 2020 - 2040, no overlapping
+            DateTime::createFromFormat('Y-m-d G:i', '2020-01-01 00:00'),
+            DateTime::createFromFormat('Y-m-d G:i', '2040-01-01 00:00')
+        );
 
-        foreach ($oe as $o) {
-            echo $o->getEvent() . " is overlapping by:\n";
-            foreach ($o->getOverlappingEvents() as $o) {
-                echo "\t" . $o."\n";
-            }
-        }
+        $db->add(
+            $event1,
+            $event2,
+            $event3
+        );
 
+        $oe = $db->getOverlappingEvents();
+
+        $this->assertEquals(2, count($oe));
+
+        $this->assertEquals(1, count($oe[0]->getOverlappingEvents()));
+        $this->assertEquals(1, count($oe[1]->getOverlappingEvents()));
+
+        $this->assertEquals([$event2], $oe[0]->getOverlappingEvents());
+        $this->assertEquals([$event1], $oe[1]->getOverlappingEvents());
     }
 }

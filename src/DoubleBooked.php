@@ -25,6 +25,8 @@ class DoubleBooked
     }
 
     /**
+     * return array of overlapping events
+     *
      * @return OverlappingEvent[]
      */
     public function getOverlappingEvents(): array
