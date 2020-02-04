@@ -1,0 +1,7 @@
+version: '3.0'
+services:
+  php:
+    container_name: php
+    image: php:7.4.2-fpm-buster
+    volumes:
+      - ./../:/code/
