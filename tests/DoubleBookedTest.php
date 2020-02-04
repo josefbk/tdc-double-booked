@@ -104,7 +104,10 @@ final class DoubleBookedTest extends TestCase
         $this->assertEquals(1, count($oe[0]->getOverlappingEvents()));
         $this->assertEquals(1, count($oe[1]->getOverlappingEvents()));
 
+        $this->assertEquals($event1, $oe[0]->getEvent());
         $this->assertEquals([$event2], $oe[0]->getOverlappingEvents());
+
+        $this->assertEquals($event2, $oe[1]->getEvent());
         $this->assertEquals([$event1], $oe[1]->getOverlappingEvents());
     }
 }

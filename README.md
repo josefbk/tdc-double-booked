@@ -5,7 +5,7 @@ simple class for checking overlapping events
 Example
 ---
 
-see _examples_ folder, can be run in _examples/cli.php_
+see _examples_ folder, can be run in _examples/cli.php_  (in docker /code/examples/cli.php)
 
     $db = new DoubleBooked();
     $event1 = new Event( // 2000 - 2020, overlapping by event 2
